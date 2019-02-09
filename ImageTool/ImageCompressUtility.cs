@@ -28,7 +28,7 @@ namespace ImageTool
             FileInfo firstFileInfo = new FileInfo(sFile);
             if (sfsc == true && firstFileInfo.Length < size * 1024)
             {
-                firstFileInfo.CopyTo(dFile);
+                firstFileInfo.CopyTo(dFile,true);
                 return true;
             }
 

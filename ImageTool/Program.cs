@@ -9,19 +9,41 @@ namespace ImageTool
 {
     class Program
     {
+        private static string path = "./";
+        private static string compressDestFloder = "../compress/";
+        private static string encryptDestFloder = "../encrypt/";
+
         static void Main(string[] args)
         {
-            var path = "./";
-            var destFloder = "../compress/";
-            if (!Directory.Exists(destFloder))
+            ImageCompress();
+            ImageEncrpy();
+
+        }
+        private static void ImageCompress()
+        {
+            if (!Directory.Exists(compressDestFloder))
             {
-                Directory.CreateDirectory(destFloder);
+                Directory.CreateDirectory(compressDestFloder);
             }
             var files = Directory.GetFiles(path).ToList();
             var imgFiles = files.FindAll(s => s.EndsWith(".JPG"));
             foreach (var img in imgFiles)
             {
-                ImageCompressUtility.CompressImage(img, destFloder + img, 50);
+                ImageCompressUtility.CompressImage(img, compressDestFloder + img, 50);
+            }
+        }
+
+        private static void ImageEncrpy()
+        {
+            if (!Directory.Exists(encryptDestFloder))
+            {
+                Directory.CreateDirectory(encryptDestFloder);
+            }
+            var files = Directory.GetFiles(compressDestFloder)
+                            .ToList().FindAll(s => s.EndsWith(".JPG"));
+            foreach (var img in files)
+            {
+                ImageEncryptUtitlity.EncryptFile(img, encryptDestFloder + img.Substring(0, img.Length - 4) + ".ENC.JPG", "password");
             }
         }
     }
