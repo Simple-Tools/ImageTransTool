@@ -71,15 +71,21 @@ public class EncryptUtility {
     private static void encryptOrDecryptFile(String srcFile, String destFile, String key, int mode){
         try{
 
-           
+            byte[] digest = toSha1(key);
+            byte[] keyBytes = new byte[8];
+            byte[] ivBytes = new byte[8];
+            System.arraycopy(digest, 0, keyBytes, 0, 8);
+            System.arraycopy(digest, 8, ivBytes, 0, 8);
 
-            DESKeySpec keySpec = new DESKeySpec(key.getBytes("UTF-8"));
+            //DESKeySpec keySpec = new DESKeySpec(key.getBytes("UTF-8"));
+            DESKeySpec keySpec = new DESKeySpec(keyBytes);
             SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
             SecretKey secretKey = keyFactory.generateSecret(keySpec);
             //https://stackoverflow.com/questions/12894722/c-sharp-and-java-des-encryption-value-are-not-identical
             //Cipher cipher = Cipher.getInstance("DES");
             Cipher cipher = Cipher.getInstance("DES/CBC/PKCS5Padding");
-            IvParameterSpec iv = new IvParameterSpec(key.getBytes("UTF-8"));
+            //IvParameterSpec iv = new IvParameterSpec(key.getBytes("UTF-8"));
+            IvParameterSpec iv = new IvParameterSpec(ivBytes);
             cipher.init(mode, secretKey, iv);
             InputStream is = new FileInputStream(srcFile);
             OutputStream out = new FileOutputStream(destFile);
@@ -134,11 +140,14 @@ public class EncryptUtility {
         crypt.reset();
         crypt.update(password.getBytes("UTF-8"));
         byte[] hashBytes = crypt.digest();
-        // Convert negative to positive
+        /*
+        //NEED NOT THIS !!!
+        // Convert negative to positive int
         // -64 to 192
         for(int i=0; i<hashBytes.length; i++){
             hashBytes[i] = (byte)(0xff & hashBytes[i]);
         }
+        */
         return hashBytes;
     }
 }

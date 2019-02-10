@@ -45,7 +45,7 @@ namespace ImageTool
             {
                 var imgName = img.Substring(compressDestFloder.LastIndexOf("/")+1);
                 var destImg = encryptDestFloder + imgName.Substring(0,imgName.Length-4);
-                ImageEncryptUtitlity.EncryptFile(img, destImg + ".ENC.JPG", "password");
+                ImageEncryptUtility.EncryptFile(img, destImg + ".ENC.JPG", "password");
             }
         }
     }
